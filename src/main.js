@@ -120,17 +120,19 @@ const mixin = {
             return this.getPreferenceString("instance", import.meta.env.VITE_PIPED_API);
         },
         authApiUrl() {
-// Around line 127 in your original code
-authApiUrl() {
-    if (this.getPreferenceBoolean("authInstance", false)) {
-        return this.getPreferenceString("auth_instance_url", this.apiUrl());
-    } else return this.apiUrl();
-},
-getAuthToken() {
-    return "AIzaSyCr2JH_jg6zt4dkWJez_RCIQ9Jnz13_O6Q";
-},
-hashCode(s) {
-    return s.split("").reduce(function (a, b) {
+            if (this.getPreferenceBoolean("authInstance", false)) {
+                return this.getPreferenceString("auth_instance_url", this.apiUrl());
+            } else return this.apiUrl();
+        },
+        getAuthToken() {
+            return this.getPreferenceString("authToken" + this.hashCode(this.authApiUrl()));
+        },
+        hashCode(s) {
+            return s.split("").reduce(function (a, b) {
+                a = (a << 5) - a + b.charCodeAt(0);
+                return a & a;
+            }, 0);
+        },
         timeAgo(time) {
             return timeAgo.format(time);
         },
